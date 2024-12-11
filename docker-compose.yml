@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.9.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+
+  inventory-service:
+    build:
+      context: .
+      dockerfile: src/inventory-service/Dockerfile
+    ports:
+      - "3003:3001"  # Changed to 3003 to avoid conflicts
+    depends_on:
+      - rabbitmq
+      - elasticsearch
+    environment:
+      - MONGODB_URI=mongodb+srv://bolajijohnson19:T0WaxJgkghBKP75v@cluster0.lwwhz.mongodb.net
+      - INVENTORY_DB=inventory
+      - RABBITMQ_URI=amqp://rabbitmq:5672
+      - ELASTICSEARCH_NODE=http://elasticsearch:9200
+      - PORT=3001
+
+  order-service:
+    build:
+      context: .
+      dockerfile: src/order-service/Dockerfile
+    ports:
+      - "3004:3002"
+    depends_on:
+      - rabbitmq
+      - elasticsearch
+      - inventory-service
+    environment:
+      - MONGODB_URI=mongodb+srv://bolajijohnson19:T0WaxJgkghBKP75v@cluster0.lwwhz.mongodb.net
+      - ORDER_DB=orders
+      - RABBITMQ_URI=amqp://rabbitmq:5672
+      - ELASTICSEARCH_NODE=http://elasticsearch:9200
+      - INVENTORY_SERVICE_URL=http://inventory-service:3001
+      - PORT=3002
+
+volumes:
+  elasticsearch_data:
