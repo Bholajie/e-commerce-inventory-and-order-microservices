@@ -14,7 +14,22 @@ export class OrderService {
   constructor() {
     this.rabbitmqClient = RabbitMQClient.getInstance();
     this.logger = ElasticsearchLogger.getInstance();
-    this.setupStockEventListener();
+    this.initialize();
+  }
+
+  private async initialize(): Promise<void> {
+    try {
+      // Ensure RabbitMQ connection is established before setting up listeners
+      await this.rabbitmqClient.connect();
+      await this.setupStockEventListener();
+    } catch (error) {
+      await this.logger.log('order-service-initialization', {
+        event: 'INITIALIZATION_FAILED',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+      // Optionally, you might want to throw the error or implement retry logic
+      console.error('Failed to initialize OrderService:', error);
+    }
   }
 
   private async setupStockEventListener(): Promise<void> {

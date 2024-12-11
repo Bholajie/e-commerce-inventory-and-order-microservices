@@ -26,7 +26,8 @@ async function startServer() {
     console.log('Connected to RabbitMQ');
 
     // Start the server
-    const port = process.env.PORT || process.env.ORDER_SERVICE_PORT || 3004;
+    // const port = process.env.PORT || process.env.ORDER_SERVICE_PORT || 3004;
+    const port = process.env.ORDER_SERVICE_PORT || 3004;
     app.listen(port, () => {
       console.log(`Order service listening on port ${port}`);
     });

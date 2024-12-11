@@ -26,7 +26,8 @@ async function startServer() {
     console.log('Connected to RabbitMQ');
 
     // Start the server
-    const port = process.env.PORT || process.env.INVENTORY_SERVICE_PORT || 3003;
+    // const port = process.env.PORT || process.env.INVENTORY_SERVICE_PORT || 3003;
+    const port = process.env.INVENTORY_SERVICE_PORT || 3003;
     app.listen(port, () => {
       console.log(`Inventory service listening on port ${port}`);
     });

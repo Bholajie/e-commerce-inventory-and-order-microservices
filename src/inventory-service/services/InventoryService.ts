@@ -13,7 +13,22 @@ export class InventoryService {
     this.rabbitmqClient = RabbitMQClient.getInstance();
     this.logger = ElasticsearchLogger.getInstance();
     this.stockEventEmitter = StockEventEmitter.getInstance();
+    // this.initialize();
   }
+
+  // private async initialize(): Promise<void> {
+  //   try {
+  //     // Ensure RabbitMQ connection is established before setting up listeners
+  //     await this.rabbitmqClient.connect();
+  //   } catch (error) {
+  //     await this.logger.log('inventory-service-initialization', {
+  //       event: 'INITIALIZATION_FAILED',
+  //       error: error instanceof Error ? error.message : 'Unknown error'
+  //     });
+  //     // Optionally, you might want to throw the error or implement retry logic
+  //     console.error('Failed to initialize InventoryService:', error);
+  //   }
+  // }
 
   async addItem(itemData: Partial<IItem>): Promise<IItem> {
     const item = new Item(itemData);
