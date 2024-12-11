@@ -2,7 +2,7 @@
 
 ## REST API Implementation
 
-### Inventory Service API (Port 3001)
+### Inventory Service API (Port 3003)
 
 #### Add New Item
 ```http
@@ -56,7 +56,7 @@ Response: 200 OK
 }
 ```
 
-### Order Service API (Port 3002)
+### Order Service API (Port 3004)
 
 #### Create Order
 ```http

@@ -37,8 +37,8 @@ docker-compose up
 
 The following services will be available:
 
-- Inventory Service: http://localhost:3001
-- Order Service: http://localhost:3002
+- Inventory Service: http://localhost:3003
+- Order Service: http://localhost:3004
 - RabbitMQ Management: http://localhost:15672
 - Elasticsearch: http://localhost:9200
 
