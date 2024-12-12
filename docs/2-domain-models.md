@@ -1,49 +1,52 @@
-# 2. Domain Models Documentation
+# Domain Models
 
-## Domain-Driven Design (DDD) Implementation
+## Stock Keeping Unit (SKU)
 
-### Inventory Domain
+### Overview
+A SKU (Stock Keeping Unit) is a unique identifier used to track and manage inventory items. It serves as a standardized way to identify products across the system.
 
-#### Item Model (IItem)
+### Format
+```
+TS-BLU-M-001
+│  │   │  │
+│  │   │  └─ Sequential number
+│  │   └──── Size (Medium)
+│  └──────── Color (Blue)
+└────────── Product type (T-Shirt)
+```
+
+### Usage
+- Inventory tracking
+- Order processing
+- Stock management
+- Analytics and reporting
+
+### Examples
+- BOOK-HPT-HC: Harry Potter hardcover book
+- SHOE-NIK-BK-42: Nike black shoes, size 42
+- PHN-IPH-14-BLK: iPhone 14 in black
+
+## Item Model
 ```typescript
 interface IItem {
-  name: string;      // Product name (e.g., "Blue T-Shirt")
-  sku: string;       // Stock Keeping Unit (e.g., "TS-BLUE-001")
-  price: number;     // Product price (e.g., 29.99)
-  quantity: number;  // Available stock (e.g., 100)
+  name: string;      // Product name
+  sku: string;       // Unique identifier
+  price: number;     // Product price
+  quantity: number;  // Available stock
 }
 ```
 
-**Business Rules**:
-- SKU must be unique
-- Quantity cannot be negative
-- Price must be positive
-- Name is required
-
-### Order Domain
-
-#### Order Model (IOrder)
+## Order Model
 ```typescript
 interface IOrder {
-  orderNumber: string;  // Unique identifier (e.g., "ORD-2023-001")
-  sku: string;         // Referenced product SKU
+  orderNumber: string;  // Unique order ID
+  sku: string;         // Product identifier
   quantity: number;    // Order quantity
-  status: string;      // Current status
+  status: string;      // Order status
 }
 ```
 
-**Status Values**:
+### Order Status Values
 - PENDING: Initial state
 - FULFILLED: Successfully processed
 - FAILED: Processing failed
-
-**Business Rules**:
-- Order number must be unique
-- Quantity must be positive
-- SKU must reference existing inventory item
-- Status transitions must follow defined flow
-
-## Model Relationships
-- Orders reference inventory items through SKU
-- Stock updates affect order fulfillment
-- Status changes trigger events

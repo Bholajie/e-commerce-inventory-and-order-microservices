@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { config } from '../shared/config';
 import inventoryRoutes from './routes';
 import { RabbitMQClient } from '../shared/messaging/rabbitmq';
+import { findAvailablePort } from '../shared/utils/portUtils';
 
 const app = express();
 
@@ -25,9 +26,13 @@ async function startServer() {
     await rabbitmqClient.connect();
     console.log('Connected to RabbitMQ');
 
+    // Find available port
+    const port = await findAvailablePort(
+      config.services.inventory.port,
+      config.services.inventory.fallbackPorts
+    );
+
     // Start the server
-    // const port = process.env.PORT || process.env.INVENTORY_SERVICE_PORT || 3003;
-    const port = process.env.INVENTORY_SERVICE_PORT || 3003;
     app.listen(port, () => {
       console.log(`Inventory service listening on port ${port}`);
     });

@@ -23,7 +23,8 @@ export class InventoryController {
 
   async updateStock(req: Request, res: Response): Promise<void> {
     try {
-      const { sku, quantity } = req.body;
+      const { sku } = req.params;
+      const { quantity } = req.body;
       const item = await this.inventoryService.updateStock(sku, quantity);
       res.json(item);
     } catch (error: unknown) {

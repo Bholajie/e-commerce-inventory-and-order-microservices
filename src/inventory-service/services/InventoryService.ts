@@ -78,10 +78,11 @@ export class InventoryService {
     return Item.findOne({ sku });
   }
 
-  async checkAndDeductStock(sku: string, quantity: number): Promise<boolean> {
+  async checkAndDeductStock(sku: string, quantity: number): Promise<{ available: boolean }> {
     const item = await Item.findOne({ sku });
+    
     if (!item || item.quantity < quantity) {
-      return false;
+      return { available: false };
     }
 
     const oldQuantity = item.quantity;
@@ -102,6 +103,6 @@ export class InventoryService {
       deducted: quantity
     });
 
-    return true;
+    return { available: true };
   }
 }
